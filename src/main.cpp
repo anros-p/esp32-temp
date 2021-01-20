@@ -1,9 +1,30 @@
-#include <Arduino.h>
+#include <WiFi.h>
+#include "WiFiManager.h"
 
-void setup() {
-  // put your setup code here, to run once:
+WiFiManager wifimgr;
+
+void setup()
+{
+    Serial.begin(115200);
+    delay(1000);
+
+    wifimgr.begin();
+    if (!wifimgr.isConfigured()) {
+        Serial.println("WiFi not configured, starting configuration");
+        wifimgr.configure();
+    }
+
+    Serial.println("Initialization done");
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
+    unsigned long time = millis();
+    wifimgr.connect();
+    unsigned long tt = millis() - time;
+    Serial.print("time taken: ");
+    Serial.print(tt);
+    Serial.println("ms");
+    Serial.println(WiFi.localIP());    
+    delay(5000);
 }
